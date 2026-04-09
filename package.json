@@ -10,6 +10,9 @@
     "start": "concurrently \"npm run backend:dev\" \"npm run frontend\"",
     "build": "npm run build --prefix frontend"
   },
+  "engines": {
+    "node": ">=22.5.0"
+  },
   "devDependencies": {
     "concurrently": "^8.2.2"
   }
