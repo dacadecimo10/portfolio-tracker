@@ -28,6 +28,6 @@ if (existsSync(frontendBuild)) {
   });
 }
 
-app.listen(PORT, () => {
-  console.log(`Portfolio Tracker backend running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Portfolio Tracker backend running on port ${PORT}`);
 });
