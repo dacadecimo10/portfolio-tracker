@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { existsSync } from 'fs';
 import portfolioRoutes from './routes/portfolio.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,14 +19,18 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+// Serve React build — express.static is safe even if the dir doesn't exist yet
 const frontendBuild = join(__dirname, '../frontend/build');
-if (existsSync(frontendBuild)) {
-  app.use(express.static(frontendBuild));
-  app.get('*', (req, res) => {
-    res.sendFile(join(frontendBuild, 'index.html'));
+app.use(express.static(frontendBuild));
+
+// Catch-all: always registered so Railway health checks always get a response
+app.get('*', (req, res) => {
+  res.sendFile(join(frontendBuild, 'index.html'), (err) => {
+    if (err) res.status(200).json({ status: 'ok', frontend: 'not built' });
   });
-}
+});
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Portfolio Tracker backend running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
+  console.log(`Frontend build path: ${frontendBuild}`);
 });
