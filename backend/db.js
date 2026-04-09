@@ -1,9 +1,9 @@
-import { DatabaseSync } from 'node:sqlite';
+import Database from 'better-sqlite3';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const db = new DatabaseSync(path.join(__dirname, 'portfolio.db'));
+const db = new Database(path.join(__dirname, 'portfolio.db'));
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS positions (
